@@ -1,0 +1,134 @@
+.trigger,
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition:
+    color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .trigger:hover,
+  .close:hover {
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgb(5 8 14 / 0.72);
+  backdrop-filter: blur(4px);
+  animation: fade 200ms var(--ease-out);
+}
+
+.content {
+  position: fixed;
+  z-index: 11;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  gap: 1.25rem;
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  padding: 1.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 0.5);
+  translate: -50% -50%;
+  animation: rise 260ms var(--ease-out);
+}
+
+.close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 40px;
+  height: 40px;
+  border-color: transparent;
+  background: transparent;
+}
+
+.title {
+  padding-right: 3rem;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+.example {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.exampleLabel,
+.exampleNote {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+.exampleLabel b {
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.exampleRow {
+  list-style: none;
+  --tile: 2.5rem;
+  --tile-font: 1.25rem;
+  --feedback-w: 7rem;
+  --chip-h: 2.25rem;
+  --chip-font: 1rem;
+  --tile-gap: 0.3125rem;
+}
+
+.done {
+  justify-self: end;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: -50% calc(-50% + 12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .content {
+    animation: none;
+  }
+
+  .trigger,
+  .close {
+    transition: none;
+  }
+}

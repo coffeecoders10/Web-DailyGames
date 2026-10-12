@@ -12,15 +12,18 @@ type TileProps = {
   index?: number;
   /** Play the flip animation. */
   reveal?: boolean;
+  /** Play a quick pop, used when a character has just been typed. */
+  pop?: boolean;
 };
 
-export function Tile({ char, state = "filled", active, index = 0, reveal }: TileProps) {
+export function Tile({ char, state = "filled", active, index = 0, reveal, pop }: TileProps) {
   return (
     <span
       className={styles.tile}
       data-state={state}
       data-active={active || undefined}
       data-reveal={reveal || undefined}
+      data-pop={pop || undefined}
       style={{ "--i": index } as CSSProperties}
       aria-hidden="true"
     >

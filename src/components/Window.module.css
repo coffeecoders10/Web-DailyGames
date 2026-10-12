@@ -1,0 +1,111 @@
+/* On phones the window runs edge to edge so the tiles keep their width */
+.window {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin-inline: -1rem;
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.titlebar {
+  display: none;
+  align-items: center;
+  gap: 0.875rem;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.dots {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.dots i {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  opacity: 0.85;
+}
+
+.dots i[data-kind="compile"] {
+  background: var(--compile);
+}
+
+.dots i[data-kind="bug"] {
+  background: var(--bug);
+}
+
+.dots i[data-kind="error"] {
+  background: var(--error);
+}
+
+.title {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.5rem;
+  min-height: 0;
+  padding: 0.625rem 1rem;
+  --tile-bg: var(--surface-2);
+}
+
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background: color-mix(in oklab, var(--accent) 16%, var(--surface));
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: background-color 300ms var(--ease-out);
+}
+
+.statusbar[data-outcome="win"] {
+  background: color-mix(in oklab, var(--compile) 18%, var(--surface));
+  color: var(--compile);
+}
+
+.statusbar[data-outcome="lose"] {
+  background: color-mix(in oklab, var(--error) 18%, var(--surface));
+  color: var(--error);
+}
+
+@media (min-width: 60rem) {
+  .titlebar {
+    display: flex;
+  }
+
+  /* The board is a size container, so the window's width has to be stated rather than measured */
+  .window {
+    width: calc(5 * var(--tile-max) + 4 * var(--tile-gap) + 0.75rem + var(--feedback-w) + 3.5rem + 2px);
+    height: min(100%, 46rem);
+    align-self: center;
+    margin-inline: 0;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgb(0 0 0 / 0.35);
+  }
+
+  .body {
+    gap: 1rem;
+    padding: 1.5rem 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statusbar {
+    transition: none;
+  }
+}

@@ -12,10 +12,14 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "A five-character code-breaking puzzle. Guess the hidden number or word in seven attempts using Compiles, Bugs and Errors as clues.";
+
 export const metadata: Metadata = {
   title: "Compiled, Bugs, and Errors",
-  description:
-    "A five-character code-breaking puzzle. Guess the hidden number or word in seven attempts using Compiles, Bugs and Errors as clues.",
+  description,
+  openGraph: { title: "Compiled, Bugs, and Errors", description, type: "website" },
+  twitter: { card: "summary", title: "Compiled, Bugs, and Errors", description },
 };
 
 export const viewport: Viewport = {

@@ -1,6 +1,11 @@
+/* A size container: its height decides how big the tiles can be (see --tile in globals.css) */
 .board {
+  container-type: size;
+  min-height: calc(7 * 1.625rem + 6 * var(--row-gap));
   display: grid;
-  gap: 0.5rem;
+  /* Any height left over is shared between the rows, so Submit sits right under the grid */
+  align-content: space-between;
+  gap: var(--row-gap);
   list-style: none;
 }
 
@@ -11,26 +16,24 @@
 /* One guess: tiles on the left, feedback on the right */
 .line {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 7.25rem;
+  grid-template-columns: minmax(0, 1fr) var(--feedback-w);
   align-items: center;
   column-gap: 0.75rem;
-  min-height: 44px;
 }
 
 .tiles {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 2.75rem));
-  justify-content: start;
-  gap: 0.3125rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--tile-gap);
 }
 
 /* A real input sits invisibly over the tiles so mobile keyboards, paste and a11y just work */
 .input {
   position: absolute;
-  inset: 0;
+  inset: -3px 0;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 6px);
   border: 0;
   background: transparent;
   color: transparent;
@@ -40,11 +43,6 @@
   cursor: text;
 }
 
-.submit {
-  width: 100%;
-  padding: 0 0.5rem;
-  gap: 0.375rem;
-}
 
 .chips {
   display: grid;
@@ -57,10 +55,10 @@
   align-items: center;
   justify-content: center;
   gap: 0.1875rem;
-  height: 2.25rem;
+  height: var(--chip-h);
   border-radius: 9px;
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: var(--chip-font);
   font-weight: 600;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -69,7 +67,7 @@
 }
 
 .chip svg {
-  font-size: 0.8125rem;
+  font-size: 0.8125em;
 }
 
 .chip[data-kind="compile"] {
@@ -85,6 +83,14 @@
 .chip[data-kind="error"] {
   color: var(--error);
   background: color-mix(in oklab, var(--error) 14%, transparent);
+}
+
+/* Placeholder in rows that have no result yet, so the column never looks empty */
+.chip[data-ghost] {
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--text-faint);
+  animation: none;
 }
 
 /* A zero stays readable but steps back so the non-zero counts stand out */
@@ -133,6 +139,18 @@
 .legendHint {
   color: var(--text-muted);
   font-size: 0.8125rem;
+}
+
+/* Inside the game window on phones there is no room for the captions; the help dialog has them */
+@media (max-width: 59.99rem) {
+  .compact {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .compact .legendHint {
+    display: none;
+  }
 }
 
 .legend li[data-kind="compile"] .legendName {

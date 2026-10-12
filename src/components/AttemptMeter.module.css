@@ -1,0 +1,42 @@
+/* Lines up with the answer tiles above it */
+/* Phones: sits beside the answer tiles, in the feedback column */
+.meter {
+  display: flex;
+  align-self: center;
+  gap: 0.1875rem;
+  grid-column: 2;
+}
+
+.segment {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  transition: background-color 220ms var(--ease-out);
+}
+
+.segment[data-used] {
+  background: var(--accent);
+}
+
+.meter[data-outcome="win"] .segment[data-used] {
+  background: var(--compile);
+}
+
+.meter[data-outcome="lose"] .segment[data-used] {
+  background: var(--text-muted);
+}
+
+@media (min-width: 60rem) {
+  .meter {
+    grid-column: 1;
+    gap: var(--tile-gap);
+    width: min(100%, calc(var(--answer-tile) * 5 + var(--tile-gap) * 4));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment {
+    transition: none;
+  }
+}

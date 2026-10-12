@@ -1,12 +1,15 @@
 "use client";
 
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useRef, useState, type CSSProperties, type FormEvent, type SyntheticEvent } from "react";
 import { MAX_ATTEMPTS, PUZZLE_LENGTH } from "@/game/config";
 import { findRepeats, sanitize, type Guess, type Mode } from "@/game/logic";
-import { Button } from "./Button";
-import { BugIcon, CompileIcon, EnterIcon, ErrorIcon } from "./Icons";
+import { BugIcon, CompileIcon, ErrorIcon } from "./Icons";
 import { Tile } from "./Tile";
 import styles from "./Board.module.css";
+
+/** The guess form lives in the board; its Submit button sits below the grid and points here. */
+export const GUESS_FORM_ID = "guess-form";
 
 const SLOTS = Array.from({ length: PUZZLE_LENGTH }, (_, i) => i);
 
@@ -24,9 +27,9 @@ function ChipIcon({ kind }: { kind: ChipKind }) {
   return <ErrorIcon />;
 }
 
-export function Legend() {
+export function Legend({ compact }: { compact?: boolean }) {
   return (
-    <ul className={styles.legend} aria-label="What the feedback means">
+    <ul className={`${styles.legend} ${compact ? styles.compact : ""}`} aria-label="What the feedback means">
       <li data-kind="compile">
         <span className={styles.legendName}>
           <CompileIcon /> Compiles
@@ -49,16 +52,16 @@ export function Legend() {
   );
 }
 
-function GuessRow({ guess, number }: { guess: Guess; number: number }) {
+export function GuessRow({ guess, number }: { guess: Guess; number: number }) {
   const summary = CHIPS.map(
     ({ field, singular, plural }) => `${guess[field]} ${guess[field] === 1 ? singular : plural}`,
   ).join(", ");
 
   return (
     <li className={styles.line}>
-      <span className="sr-only">
+      <VisuallyHidden.Root>
         Guess {number}: {guess.value.split("").join(" ")}. {summary}.
-      </span>
+      </VisuallyHidden.Root>
       <div className={styles.tiles} aria-hidden="true">
         {SLOTS.map((i) => (
           <Tile key={i} char={guess.value[i]} />
@@ -82,6 +85,18 @@ function GuessRow({ guess, number }: { guess: Guess; number: number }) {
   );
 }
 
+function GhostChips() {
+  return (
+    <div className={styles.chips} aria-hidden="true">
+      {CHIPS.map(({ kind }) => (
+        <span key={kind} className={styles.chip} data-ghost>
+          –
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function EmptyRow() {
   return (
     <li className={styles.line} aria-hidden="true">
@@ -90,6 +105,7 @@ function EmptyRow() {
           <Tile key={i} state="empty" />
         ))}
       </div>
+      <GhostChips />
     </li>
   );
 }
@@ -142,14 +158,15 @@ function ActiveRow({ mode, number, value, onChange, onSubmit, autoFocus, describ
 
   return (
     <li className={styles.activeItem}>
-      <form className={styles.line} onSubmit={handleSubmit} noValidate>
+      <form id={GUESS_FORM_ID} className={styles.line} onSubmit={handleSubmit} noValidate>
         <div className={styles.tiles} ref={tilesRef}>
           {SLOTS.map((i) => {
             const char = value[i];
             const isRepeat = char !== undefined && repeats.has(char);
             return (
               <Tile
-                key={i}
+                key={`${i}-${char ?? ""}`}
+                pop={char !== undefined}
                 char={char}
                 state={isRepeat ? "repeat" : char ? "filled" : "empty"}
                 active={focused && (full || i === value.length)}
@@ -175,10 +192,7 @@ function ActiveRow({ mode, number, value, onChange, onSubmit, autoFocus, describ
             aria-describedby={describedBy}
           />
         </div>
-        <Button type="submit" variant="primary" className={styles.submit}>
-          Submit
-          <EnterIcon />
-        </Button>
+        <GhostChips />
       </form>
     </li>
   );
