@@ -1,0 +1,155 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.header {
+  display: grid;
+  gap: 1rem;
+}
+
+.title {
+  font-size: clamp(1.375rem, 6.4vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+/* The three words double as the colour key for the feedback below */
+.title [data-kind="compile"] {
+  color: var(--compile);
+}
+
+.title [data-kind="bug"] {
+  color: var(--bug);
+}
+
+.title [data-kind="error"] {
+  color: var(--error);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* The clue reads like a comment in source code */
+.clue {
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.comment {
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.skeleton {
+  height: 1.55rem;
+  border-radius: 6px;
+  background: var(--surface-2);
+}
+
+/* Same two-column grid as a guess row, so the answer lines up with the tiles below */
+.answer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7.25rem;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.75rem;
+}
+
+.answerTiles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 2.75rem));
+  gap: 0.3125rem;
+}
+
+.pips {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.pips span {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.pips span[data-used] {
+  background: var(--text-muted);
+}
+
+.status {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.125rem;
+  min-height: 1.5rem;
+}
+
+.statusTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.statusDetail {
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.status[data-outcome="win"] .statusTitle {
+  color: var(--compile);
+}
+
+.status[data-outcome="lose"] .statusTitle {
+  color: var(--error);
+}
+
+.explanation {
+  margin-top: 0.25rem;
+  color: var(--text);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+.play {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.hint {
+  min-height: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.hint[data-problem] {
+  color: var(--error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pips span {
+    transition: none;
+  }
+}
